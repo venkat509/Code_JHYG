@@ -1,0 +1,113 @@
+insert update delete undelete upsert merge
+
+insert
+
+1.Create a new  opportunity with wilson as owner of the record.
+=>If lookup is a Standad field then we need to reffer the fields as FieldName+Id
+
+User u =[Select id, from user where FristName = 'Wilson'];
+Opportunity op = new Opportunity();
+op.Name ='Admin';
+op.StageName='Prospect';
+Op.CloseDate=System.today()+15;
+op.ownerId= u.Id;
+insert op;
+
+2.Write a Query and Fetch Account Whose name is Wipro and create  a new Contact fo the wipro.
+
+Account acc =[Select id from Account Where Name='Wipro']
+Contact con = new Contact();
+con.LAstNAme='Ramu';
+con.FrsitName='Raju';
+con.AccountId = acc.Id
+insert con;
+ 
+===========================================================
+Update:-
+--------- 
+SObject/SObject[]
+
+1.
+List<Account> acc = [select id, name from account where rating ='Hot'];
+for(Account a : acc){
+a.rating='Warm';
+// Here no need to add to list.
+}
+update acc;
+
+2.
+List<Opportunity> opplist = [Select id,stagename, name from Opportunity where stageName='Prospect'];
+for(Opportubity opp : opplist){
+opp.stagename='Closed won';
+opp.closeDate= system.today();
+}
+update opplist;
+====================================================================
+
+Delete:
+--------
+
+1.Fetch all leads which  are created today and Delete them
+
+List<Lead> le = [Select id, name from Lead where createdDate= today]
+Delete le;
+
+2. Fetch all Account Whose rating hot and Delete them.
+List<Account> a = [Select id, name, rating from Account where Rating= 'Hot']
+delete a;
+========================================================
+
+Upsert:- Insert + Update
+--------
+SObject/Sobject[], ExtenalID
+
+Employee__c emp= new Employee__c();
+emp.NAme='Kiran Chandra';
+emp.Phone='040-7989';
+emp.myId__c =1;
+upsert emp myId__c;
+
+============================================================
+UnDelete:-
+---------
+
+Sobject/SObject[]
+
+1.Fetch ALL the accounts Records which Are recyclebin.
+List<Account> Acc = [Select id,name from Account Where isDeleted=True All Rows];
+Undelete Acc;
+
+2.Fetch all leads Which are deleted and Undeleted them
+List<Lead> Leads = [Select id, from Lead ehere isDeleted=true All Rows];
+Undelete Leads;
+
+============================================================================
+Merge:- Update and Delete
+------
+
+Child recods of record 2 are Re-Assigned to record1 and Delete Record2
+
+merge record1 record2 
+----------------
+
+
+Account acc1 = [slect id, name from Account where name= 'venkatesh']
+Account acc2 = [Select id, name from Account Where name ='Venkatesh']
+merge acc1 acc2;
+
+Array
+1.Create A Array of NEW Accounts and insert
+
+Account[]accounts = new Account[4];
+Account a1 = new Account(Name='Ramu',Industry='IT');
+Account a2 - new Account(Name='Raju', Industry='Software');
+accounts[0]=a1;
+accounts[1]=a2;
+insert accounts;
+
+
+
+
+
+
+
